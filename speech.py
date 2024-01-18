@@ -3,9 +3,10 @@ import speech_recognition as sr
 
 def speech_to_text():
 	recognizer = sr.Recognizer()
+	mic = sr.Microphone(device_index=1) # specific microphone
 
 	while True:
-		with sr.Microphone() as source:
+		with mic as source:
 			print("Say something:")
 			recognizer.adjust_for_ambient_noise(source)  # Adjust for ambient noise
 			audio = recognizer.listen(source)
