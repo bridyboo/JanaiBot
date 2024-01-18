@@ -1,4 +1,4 @@
-import chatbot
+from JanaiBot import chatbot
 
 janai = chatbot.ChatBot()
 chatting = True
@@ -7,3 +7,5 @@ while(chatting):
 	bot_response = janai.queryBot(question)
 	print("Janai:", bot_response)
 
+	if question == 'end program':
+		break
