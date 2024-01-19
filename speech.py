@@ -3,7 +3,7 @@ import speech_recognition as sr
 
 def speech_to_text():
 	recognizer = sr.Recognizer()
-	mic = sr.Microphone(device_index=1) # specific microphone
+	mic = sr.Microphone(device_index=1)  # specific microphone
 
 	while True:
 		with mic as source:
