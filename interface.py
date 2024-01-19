@@ -10,7 +10,7 @@ while (chatting):
 	print("User:", question)
 
 	bot_response = janai.queryBot(question)
-	#TTS.textToSpeech(bot_response)
+	TTS.textToSpeech(bot_response)
 	print("Janai:", bot_response)
 
 	if 'end program' in question.lower():
