@@ -1,6 +1,6 @@
 from gtts import gTTS
 from pydub import AudioSegment
-import pygame
+from pydub.playback import play
 import os
 
 def textToSpeech(textspeech):
@@ -34,21 +34,8 @@ def textToSpeech(textspeech):
     # Increase the pitch by setting a higher frame rate
     increased_pitch_audio = adjusted_audio.set_frame_rate(int(adjusted_audio.frame_rate * 1.25))  # Adjust as needed
 
-    # Save the adjusted audio
-    increased_pitch_audio.export(adjusted_filename, format="mp3")
-
-    # Use pygame to play the adjusted audio
-    pygame.mixer.init()
-    pygame.mixer.music.load(adjusted_filename)
-    pygame.mixer.music.play()
-
-    # Keep the program running until the audio finishes playing
-    while pygame.mixer.music.get_busy():
-        pygame.time.Clock().tick(10)
-
-    # Stop playback and close the audio file
-    pygame.mixer.music.stop()
-    pygame.mixer.quit()
+    # Play the adjusted audio using pydub
+    play(increased_pitch_audio)
 
     # Remove both output files after playing the audio
     for filename in [original_filename, adjusted_filename]:
