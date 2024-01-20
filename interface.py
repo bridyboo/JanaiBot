@@ -1,18 +1,31 @@
 from JanaiBot import chatbot
-import speech
+from speech2 import AudioToTextRecorder
+from multiprocessing import Manager, freeze_support
 import TTS
 
 janai = chatbot.ChatBot()
 chatting = True
 
-while (chatting):
-	question = speech.speech_to_text()
-	print("User:", question)
+def process_text(text):
+	print(text)
 
-	bot_response = janai.queryBot(question)
-	TTS.textToSpeech(bot_response)
-	print("Janai:", bot_response)
 
-	if 'end program' in question.lower():
-		break
+if __name__ == '__main__':
+	# Ensure freeze_support is called on Windows
+	freeze_support
+	recorder = AudioToTextRecorder()
+	while chatting:
+		question = recorder.text()
+
+		print("User:", question)
+
+		bot_response = janai.queryBot(question)
+		TTS.textToSpeech(bot_response)
+		print("Janai:", bot_response)
+
+		if 'close program' in question.lower():
+			chatting = False
+
+	# shutdown the recorder
+	recorder.shutdown()
 
