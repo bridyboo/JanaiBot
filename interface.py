@@ -1,8 +1,8 @@
 from JanaiBot import chatbot
 from speech2 import AudioToTextRecorder
 from multiprocessing import Manager, freeze_support
-import TTS
-
+import TTS # deprecating this one I think
+import TTS2
 janai = chatbot.ChatBot()
 chatting = True
 
@@ -16,11 +16,12 @@ if __name__ == '__main__':
 	recorder = AudioToTextRecorder()
 	while chatting:
 		question = recorder.text()
-
+		#question = input("say something: ")
 		print("User:", question)
 
 		bot_response = janai.queryBot(question)
 		TTS.textToSpeech(bot_response)
+		#TTS2.text_to_speech(bot_response)
 		print("Janai:", bot_response)
 
 		if 'close program' in question.lower():
