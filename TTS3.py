@@ -23,12 +23,12 @@ def text_to_speech(text, file_name="output.wav"):
     voice = ElementTree.SubElement(xml_body, 'voice')
     voice.set('{http://www.w3.org/XML/1998/namespace}lang', 'en-US')
     voice.set('{http://www.w3.org/XML/1998/namespace}gender', 'Female')
-    voice.set('name', 'en-US-AriaNeural')  # You can change the voice here
+    voice.set('name', 'en-US-NancyNeural')  # You can change the voice here
 
     # Add prosody for pitch and rate
     prosody = ElementTree.SubElement(voice, 'prosody')
-    prosody.set('pitch', '+15%')  # Increase pitch by 10%
-    prosody.set('rate', '+10%')  # Increase speed; you can also use percentages
+    prosody.set('pitch', '+18%')  # Increase pitch by 10%
+    prosody.set('rate', '+15%')  # Increase speed; you can also use percentages
 
     prosody.text = text
 
@@ -55,3 +55,9 @@ def text_to_speech(text, file_name="output.wav"):
 if __name__ == '__main__':
     # Example usage
     text_to_speech("Hello! ooh-mimi ja-nye here! how's your day?")
+    text_to_speech("Elden ring!! It's like FromSoftware took everything they've learned from their previous titles and cranked it up to eleven.")
+
+
+    #en-US-NancyNeural
+    #pitch 18%
+    #speed 15%
