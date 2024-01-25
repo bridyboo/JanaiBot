@@ -11,7 +11,7 @@ HOST = 'irc.chat.twitch.tv'
 PORT = 6667
 NICK = 'bridyboo_'
 TOKEN = oauth_token   # Prefixed with 'oauth:'
-CHANNEL = 'aimbotcalvin'
+CHANNEL = 'Lil_Majin'
 
 def connect_to_twitch():
     # Initialize socket
@@ -35,8 +35,19 @@ def receive_messages(sock):
             if response.startswith('PING'):
                 sock.send("PONG :tmi.twitch.tv\r\n".encode('utf-8'))
             else:
-                # Parse and handle the chat message
-                print(response)
+                # Parsing the chat message
+                if "PRIVMSG" in response:
+                    parts = response.split(":", 2)
+                    if len(parts) > 2:
+                        username = parts[1].split("!", 1)[0]
+                        message = parts[2].strip()
+                        output_message = f"{username}: {message}\n"
+
+                        # Write the message to a text file
+                        with open('chat_log.txt', 'a', encoding='utf-8') as file:
+                            file.write(output_message)
+
+                        print(output_message)
         except socket.error as e:
             print(f"Socket error: {e}")
             break

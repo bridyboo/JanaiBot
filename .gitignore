@@ -2,3 +2,4 @@
 .context
 __pycache__
 venv/
+Addons/chat_log.txt
