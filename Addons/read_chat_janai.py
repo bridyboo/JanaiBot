@@ -1,24 +1,46 @@
 import os
-from twitchio.ext import commands
+import socket
 from dotenv import load_dotenv
 
 env_path = r"C:\Users\matth\PycharmProjects\ChatBotLLMJanai\JanaiBot\.env"
 load_dotenv(dotenv_path=env_path)
 
-twitch_access_token = os.environ.get("twitch_oauth_token")
+oauth_token = os.environ.get("twitch_oauth_works")
 
-class Bot(commands.Bot):
+HOST = 'irc.chat.twitch.tv'
+PORT = 6667
+NICK = 'bridyboo_'
+TOKEN = oauth_token   # Prefixed with 'oauth:'
+CHANNEL = 'aimbotcalvin'
 
-	def __init__(self):
-		super().__init__(token=twitch_access_token, prefix='!', initial_channels=['channel'])
+def connect_to_twitch():
+    # Initialize socket
+    sock = socket.socket()
 
-	async def event_ready(self):
-		print(f'Logged in as | {self.nick}')
+    # Connect to Twitch IRC
+    sock.connect((HOST, PORT))
 
-	async def event_message(self, message):
-		print(f'Message from {message.author.name}: {message.content}')
-		await self.handle_commands(message)
+    # Authenticate
+    sock.send(f"PASS {TOKEN}\r\n".encode('utf-8'))
+    sock.send(f"NICK {NICK.lower()}\r\n".encode('utf-8'))
+    sock.send(f"JOIN #{CHANNEL.lower()}\r\n".encode('utf-8'))
 
+    return sock
 
-bot = Bot()
-bot.run()
+def receive_messages(sock):
+    while True:
+        try:
+            response = sock.recv(2048).decode('utf-8')
+
+            if response.startswith('PING'):
+                sock.send("PONG :tmi.twitch.tv\r\n".encode('utf-8'))
+            else:
+                # Parse and handle the chat message
+                print(response)
+        except socket.error as e:
+            print(f"Socket error: {e}")
+            break
+
+if __name__ == "__main__":
+    sock = connect_to_twitch()
+    receive_messages(sock)
