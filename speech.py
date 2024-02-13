@@ -1,38 +1,39 @@
+import pyaudio
 import speech_recognition as sr
 
-device_index = 1
+def transcribe_system_audio():
+    recognizer = sr.Recognizer()
+    p = pyaudio.PyAudio()
 
+    # Replace this with the appropriate device index
+    device_index = 41
 
-def speech_to_text():
-	recognizer = sr.Recognizer()
-	mic = sr.Microphone(device_index=device_index)  # specific microphone
+    stream = p.open(format=pyaudio.paInt16,
+                    channels=8,
+                    rate=44100,
+                    input=True,
+                    input_device_index=device_index,
+                    frames_per_buffer=2048)
 
-	while True:
-		with mic as source:
-			print("Say something:")
-			recognizer.adjust_for_ambient_noise(source)  # Adjust for ambient noise
-			audio = recognizer.listen(source)
+    try:
+        while True:
+            audio_data = stream.read(1024)
+            audio = sr.AudioData(audio_data, 44100, 2)
 
-			try:
-				text = recognizer.recognize_google(audio)
-				return text  # Return text if successful
+            try:
+                text = recognizer.recognize_google(audio)
+                print("Transcribed: " + text)
+            except sr.UnknownValueError:
+                print("Audio not understood")
+            except sr.RequestError as e:
+                print(f"Error: {e}")
 
-			except sr.UnknownValueError:
-				print("Could not understand audio")
-			except sr.RequestError as e:
-				print(f"Could not request results from Google Speech Recognition service; {e}")
+    except KeyboardInterrupt:
+        print("Stopping transcription")
 
+    stream.stop_stream()
+    stream.close()
+    p.terminate()
 
-def list_audio_sources():
-	# List available audio devices
-	audio_sources = sr.Microphone.list_microphone_names()
-
-	# Print the list of audio sources
-	for i, source in enumerate(audio_sources):
-		print(f"Index {i}: {source}")
-
-
-# Call the function to list audio sources
 if __name__ == "__main__":
-	print(speech_to_text())
-# list_audio_sources()
+    transcribe_system_audio()

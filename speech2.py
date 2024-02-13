@@ -473,8 +473,8 @@ class AudioToTextRecorder:
 
         logging.debug('RealtimeSTT initialization completed successfully')
 
-        print(f"buffer_size: {self.buffer_size}")
-        print(f"samplerate: {self.sample_rate}")
+        # print(f"buffer_size: {self.buffer_size}")
+        # print(f"samplerate: {self.sample_rate}")
 
     @staticmethod
     def _transcription_worker(conn,
