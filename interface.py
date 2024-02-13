@@ -1,9 +1,7 @@
 from JanaiBot import chatbot
 from speech2 import AudioToTextRecorder
-from multiprocessing import Manager, freeze_support
-import TTS  # deprecating this one I think
-import TTS2
 import TTS3
+
 
 janai = chatbot.ChatBot()
 chatting = True
@@ -20,8 +18,6 @@ def replace_words(text):
 
 
 if __name__ == '__main__':
-	# Ensure freeze_support is called on Windows
-	freeze_support
 	recorder = AudioToTextRecorder()
 	while chatting:
 		question = recorder.text()
