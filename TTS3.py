@@ -1,12 +1,18 @@
 import requests
 import os
+from dotenv import load_dotenv
 from xml.etree import ElementTree
 from pydub import AudioSegment
-from pydub.playback import play
+import simpleaudio as sa
+
+# dotenv
+env_path = r"C:\Users\matth\PycharmProjects\ChatBotLLMJanai\JanaiBot\.env"
+load_dotenv(dotenv_path=env_path)
+sub_key = os.environ.get("azuretts_api")
 
 # Set up the keys and endpoint
-subscription_key = "5ba1c5a4c1b6443ab327c9f8982492f8"
-tts_endpoint = "https://westus.tts.speech.microsoft.com/cognitiveservices/v1"
+subscription_key = sub_key
+tts_endpoint = "https://eastus.tts.speech.microsoft.com/cognitiveservices/v1"
 
 def text_to_speech(text, file_name="output.wav"):
     # Set the headers
@@ -27,8 +33,8 @@ def text_to_speech(text, file_name="output.wav"):
 
     # Add prosody for pitch and rate
     prosody = ElementTree.SubElement(voice, 'prosody')
-    prosody.set('pitch', '+18%')  # Increase pitch by 10%
-    prosody.set('rate', '+15%')  # Increase speed; you can also use percentages
+    prosody.set('pitch', '+18%')  # Increase pitch by 18%
+    prosody.set('rate', '+15%')  # Increase speed by 15%
 
     prosody.text = text
 
@@ -43,9 +49,10 @@ def text_to_speech(text, file_name="output.wav"):
         with open(file_name, "wb") as audio:
             audio.write(response.content)
 
-        # Play the audio using pydub
+        # Play the audio using simpleaudio
         audio = AudioSegment.from_wav(file_name)
-        play(audio)
+        play_obj = sa.play_buffer(audio.raw_data, num_channels=audio.channels, bytes_per_sample=audio.sample_width, sample_rate=audio.frame_rate)
+        play_obj.wait_done()
 
         # Delete the file after playback
         os.remove(file_name)
@@ -56,8 +63,3 @@ if __name__ == '__main__':
     # Example usage
     text_to_speech("Hello! ooh-mimi ja-nye here! how's your day?")
     text_to_speech("Elden ring!! It's like FromSoftware took everything they've learned from their previous titles and cranked it up to eleven.")
-
-
-    #en-US-NancyNeural
-    #pitch 18%
-    #speed 15%
